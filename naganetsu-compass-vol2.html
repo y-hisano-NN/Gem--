@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta property="og:title" content="COMPASS Standard Vol.2: OSの実践と訓練">
+  <meta property="og:description" content="個人の覚悟を組織の成果に変える「対話の4象限」と「会議の心得」の図解です。">
+  <meta property="og:type" content="article">
+  <title>COMPASS Standard Vol.2: OSの実践と訓練</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FFFFFF'/><rect x='8' y='8' width='84' height='84' rx='14' fill='none' stroke='%233B82F6' stroke-width='4'/><circle cx='32' cy='40' r='10' fill='%233B82F6' opacity='0.8'/><circle cx='68' cy='40' r='10' fill='%2360A5FA' opacity='0.8'/><rect x='25' y='62' width='50' height='6' rx='3' fill='%2394A3B8' opacity='0.6'/><rect x='30' y='74' width='40' height='6' rx='3' fill='%2394A3B8' opacity='0.3'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ads: {
+              bg: '#FFFFFF',
+              surface: '#F8FAFC',
+              hover: '#F1F5F9',
+              border: '#E2E8F0',
+              accent: '#3B82F6',
+              'accent-light': '#2563EB',
+              text: '#1E293B',
+              muted: '#64748B',
+              dim: '#94A3B8',
+              positive: '#10B981',
+              negative: '#EF4444',
+              warning: '#F59E0B',
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans JP"', '"Hiragino Sans"', '"Hiragino Kaku Gothic ProN"', '"Yu Gothic UI"', '"Meiryo"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { border-top: none !important; }
+      .rounded-xl { break-inside: avoid; }
+      .md\:flex-row { flex-direction: row !important; }
+      .md\:hidden { display: none !important; }
+      .hidden.md\:block { display: block !important; }
+      .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+      .md\:mb-20 { margin-bottom: 5rem !important; }
+      .md\:py-16 { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+      .bg-clip-text.text-transparent {
+        -webkit-background-clip: initial !important;
+        background-clip: initial !important;
+        color: #2563EB !important;
+        -webkit-text-fill-color: #2563EB !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-ads-bg text-slate-600 antialiased leading-relaxed border-t-4 border-ads-accent">
+  <div class="no-print max-w-3xl mx-auto px-5 pt-2 flex justify-end">
+    <button onclick="window.print()" class="flex items-center gap-1.5 text-xs text-ads-dim hover:text-ads-accent transition-colors cursor-pointer">
+      <i data-lucide="download" class="w-3.5 h-3.5"></i>
+      PDF
+    </button>
+  </div>
+  <main class="max-w-3xl mx-auto px-5 py-10 md:py-16">
+<div class="text-center mb-10 md:mb-16">
+  <div class="inline-flex items-center gap-2 bg-emerald-700 text-white px-4 py-1.5 rounded-full text-sm font-bold mb-6 tracking-widest">
+    COMPASS Standard Vol.2
+  </div>
+  <h1 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-6 leading-tight">
+    OSの実践と<span class="text-emerald-600">訓練</span>
+  </h1>
+  <p class="text-lg text-ads-muted max-w-xl mx-auto leading-relaxed">
+    個人の覚悟を、組織の力に変える唯一の手段は「対話」である。<br>
+    ここでは、全員活躍を実現するコミュニケーションの生態系と、思考を磨く公式な訓練場（道場）としての会議のあり方を定義する。
+  </p>
+</div>
+
+<section class="mb-16 md:mb-20">
+  <div class="flex items-center gap-3 mb-6 border-b border-ads-border pb-4">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-600 text-white flex-shrink-0">
+      <i data-lucide="messages-square" class="w-5 h-5"></i>
+    </div>
+    <div>
+      <h2 class="text-xl md:text-2xl font-bold text-slate-900">全員活躍を実現する「対話の4象限」</h2>
+    </div>
+  </div>
+
+  <p class="mb-8 leading-relaxed">
+    組織のコミュニケーションは「内容」と「目的」の2軸で4つに分類されます。これらが連携して回ることで、植物が育つような<strong class="text-emerald-700">「土壌 → 芽 → 光」</strong>という成長の好循環が生まれます。
+  </p>
+
+  <div class="relative max-w-3xl mx-auto mb-8 bg-ads-surface border border-ads-border p-4 md:p-8 rounded-2xl">
+    <div class="absolute -left-3 top-1/2 transform -translate-y-1/2 -rotate-90 text-xs font-bold text-slate-400 tracking-widest hidden md:block">内容（価値観か情報か）</div>
+    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 text-xs font-bold text-slate-400 tracking-widest bg-ads-surface px-2">目的（攻めか守りか）</div>
+
+    <div class="grid grid-cols-2 gap-3 md:gap-4 relative">
+      <div class="text-center font-black text-slate-700 text-sm mb-1 col-start-1">攻め <span class="text-[10px] font-normal text-ads-muted block">Creation / Change</span></div>
+      <div class="text-center font-black text-slate-700 text-sm mb-1 col-start-2">守り <span class="text-[10px] font-normal text-ads-muted block">Maintenance / Stability</span></div>
+      
+      <div class="relative">
+        <div class="absolute -left-10 top-1/2 transform -translate-y-1/2 -rotate-90 text-sm font-black text-slate-700 whitespace-nowrap hidden md:block">価値観 <span class="font-normal text-[10px]">（主観）</span></div>
+        <div class="h-full bg-blue-50 border border-blue-200 rounded-xl p-4 flex flex-col items-center justify-center text-center relative overflow-hidden">
+          <i data-lucide="sun" class="absolute -top-4 -right-4 w-16 h-16 text-blue-200 opacity-50"></i>
+          <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center font-black text-xs mb-2 shadow-sm z-10">1</div>
+          <h3 class="font-bold text-blue-900 mb-1 z-10">パーパス対話</h3>
+          <p class="text-xs text-blue-800/80 mb-2 z-10">「何のためにやるか」の意味付け</p>
+          <div class="text-[10px] bg-white px-2 py-0.5 rounded-full text-blue-600 border border-blue-100 z-10 font-bold flex items-center gap-1"><i data-lucide="arrow-right" class="w-3 h-3"></i> 上司からチームへ</div>
+        </div>
+      </div>
+      
+      <div class="relative">
+        <div class="h-full bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col items-center justify-center text-center relative overflow-hidden">
+          <i data-lucide="sprout" class="absolute -bottom-4 -right-4 w-16 h-16 text-amber-200 opacity-50"></i>
+          <div class="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center font-black text-xs mb-2 shadow-sm z-10">2</div>
+          <h3 class="font-bold text-amber-900 mb-1 z-10">信頼関係構築</h3>
+          <p class="text-xs text-amber-800/80 mb-2 z-10">心理的安全性の高い土壌づくり</p>
+          <div class="text-[10px] bg-white px-2 py-0.5 rounded-full text-amber-600 border border-amber-100 z-10 font-bold flex items-center gap-1"><i data-lucide="arrow-left-right" class="w-3 h-3"></i> 上司とメンバー双方向</div>
+        </div>
+      </div>
+
+      <div class="relative">
+        <div class="absolute -left-10 top-1/2 transform -translate-y-1/2 -rotate-90 text-sm font-black text-slate-700 whitespace-nowrap hidden md:block">情報 <span class="font-normal text-[10px]">（客観）</span></div>
+        <div class="h-full bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex flex-col items-center justify-center text-center relative overflow-hidden">
+          <i data-lucide="leaf" class="absolute -top-4 -right-4 w-16 h-16 text-emerald-200 opacity-50"></i>
+          <div class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center font-black text-xs mb-2 shadow-sm z-10">3</div>
+          <h3 class="font-bold text-emerald-900 mb-1 z-10">現場改善の起案</h3>
+          <p class="text-xs text-emerald-800/80 mb-2 z-10">当事者意識を持った提案・問い</p>
+          <div class="text-[10px] bg-white px-2 py-0.5 rounded-full text-emerald-600 border border-emerald-100 z-10 font-bold flex items-center gap-1"><i data-lucide="arrow-right" class="w-3 h-3"></i> メンバーから上司へ</div>
+        </div>
+      </div>
+
+      <div class="relative">
+        <div class="h-full bg-slate-100 border border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center text-center relative overflow-hidden">
+          <i data-lucide="layers" class="absolute -bottom-4 -right-4 w-16 h-16 text-slate-200 opacity-50"></i>
+          <div class="w-7 h-7 rounded-full bg-slate-600 text-white flex items-center justify-center font-black text-xs mb-2 shadow-sm z-10">4</div>
+          <h3 class="font-bold text-slate-900 mb-1 z-10">定常業務オペ</h3>
+          <p class="text-xs text-slate-600 mb-2 z-10">日々の報連相・タスク処理</p>
+          <div class="text-[10px] bg-white px-2 py-0.5 rounded-full text-slate-600 border border-slate-200 z-10 font-bold flex items-center gap-1"><i data-lucide="repeat" class="w-3 h-3"></i> 全方向</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-amber-50/50 border border-amber-100 rounded-xl p-4 mb-8 shadow-sm">
+    <div class="flex items-center gap-1.5 font-bold text-amber-800 mb-2 text-sm">
+      <i data-lucide="book-open" class="w-4 h-4"></i> 用語：心理的安全性（象限②の土壌）
+    </div>
+    <p class="text-xs md:text-sm text-amber-900/80 leading-relaxed">
+      単なる「仲良しクラブ」のことではありません。目標達成のために、厳しい意見やバッドニュースであっても、無知や無能と思われる不安を感じることなく、<strong class="text-amber-900 font-bold">お互いに安心して本音を言い合える強固な土壌</strong>のことです。
+    </p>
+  </div>
+
+  <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white shadow-md flex flex-col md:flex-row items-center md:items-start gap-4">
+    <div class="bg-white/20 p-3 rounded-full flex-shrink-0">
+      <i data-lucide="zap" class="w-6 h-6 text-white"></i>
+    </div>
+    <div>
+      <h3 class="font-bold text-lg mb-2">対話のモードを変える「魔法のスイッチ」</h3>
+      <p class="text-sm text-blue-50 leading-relaxed mb-3">
+        放っておくと、日々の対話は「④定常業務」ばかりになり、未来や信頼の「空白地帯」が生まれます。そこから対話を引き上げる最強のスイッチが<strong class="bg-white text-blue-700 px-2 py-0.5 rounded mx-1 font-black">一言で言うと？</strong>という問いかけです。
+      </p>
+      <ul class="text-xs text-blue-100 space-y-2">
+        <li class="flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i> 「一言で言うと、何のためにやるんだっけ？」 ＝ <span class="font-bold text-white">④から①（パーパス）へ</span></li>
+        <li class="flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i> 「一言で言うと、一番の課題（真因）は何？」 ＝ <span class="font-bold text-white">④から③（改善）へ</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="mb-16 md:mb-20">
+  <div class="flex items-center gap-3 mb-6 border-b border-ads-border pb-4">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-600 text-white flex-shrink-0">
+      <i data-lucide="swords" class="w-5 h-5"></i>
+    </div>
+    <div>
+      <h2 class="text-xl md:text-2xl font-bold text-slate-900">会議の心得：知的な「訓練場（道場）」</h2>
+    </div>
+  </div>
+
+  <p class="mb-6 leading-relaxed">
+    会議は単なる報告の場ではありません。チームの知恵を結集し、第1部で学んだ「思考の型」をフル稼働させて結論を出すための<strong class="text-indigo-700">真剣勝負の訓練場</strong>です。ダメな会議（会して議せず、議して決せず）を撲滅します。
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="border border-indigo-100 bg-indigo-50/50 rounded-xl p-4 text-center">
+      <div class="text-xs font-bold text-indigo-500 mb-1 tracking-widest">TYPE A</div>
+      <h3 class="font-black text-indigo-900 text-sm mb-2">意思決定をする</h3>
+      <p class="text-xs text-indigo-800/70 mb-3">結論を出すための会議</p>
+      <div class="text-[10px] bg-white border border-indigo-200 text-indigo-700 px-2 py-1 rounded inline-block font-bold">推奨：5名程度まで</div>
+    </div>
+    <div class="border border-indigo-100 bg-indigo-50/50 rounded-xl p-4 text-center">
+      <div class="text-xs font-bold text-indigo-500 mb-1 tracking-widest">TYPE B</div>
+      <h3 class="font-black text-indigo-900 text-sm mb-2">アイデアを討議する</h3>
+      <p class="text-xs text-indigo-800/70 mb-3">新しい発想を生み出す会議</p>
+      <div class="text-[10px] bg-white border border-indigo-200 text-indigo-700 px-2 py-1 rounded inline-block font-bold">推奨：8名程度まで</div>
+    </div>
+    <div class="border border-indigo-100 bg-indigo-50/50 rounded-xl p-4 text-center">
+      <div class="text-xs font-bold text-indigo-500 mb-1 tracking-widest">TYPE C</div>
+      <h3 class="font-black text-indigo-900 text-sm mb-2">情報を共有する</h3>
+      <p class="text-xs text-indigo-800/70 mb-3">認識を揃えるための会議</p>
+      <div class="text-[10px] bg-white border border-indigo-200 text-indigo-700 px-2 py-1 rounded inline-block font-bold">推奨：制限なし</div>
+    </div>
+  </div>
+
+  <div class="bg-slate-800 rounded-xl p-5 mb-8 shadow-md text-white">
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-1.5 font-bold text-indigo-300 text-sm">
+        <i data-lucide="book-open" class="w-4 h-4"></i> 用語：質問責任（会議における大前提）
+      </div>
+      <div class="text-[10px] bg-white/10 px-2 py-0.5 rounded font-bold">100%当事者</div>
+    </div>
+    <p class="text-xs md:text-sm text-slate-300 leading-relaxed">
+      分からないこと、疑問に思うこと、納得できないことについて、そのまま放置せず、<strong class="text-white font-bold">積極的に問いを発する義務</strong>のことです。受け身で説明を待つのではなく、自ら理解を深めようとする主体的な姿勢が訓練の第一歩です。
+    </p>
+  </div>
+</section>
+
+<section class="mb-10">
+  <div class="flex items-center gap-3 mb-6 border-b border-ads-border pb-4">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-700 text-white flex-shrink-0">
+      <i data-lucide="git-merge" class="w-5 h-5"></i>
+    </div>
+    <div>
+      <h2 class="text-xl md:text-2xl font-bold text-slate-900">会議の4ステップ</h2>
+    </div>
+  </div>
+
+  <div class="relative pl-6 md:pl-8 space-y-8 before:absolute before:inset-0 before:ml-[15px] md:before:ml-[23px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-slate-200 before:via-slate-300 before:to-transparent">
+    
+    <div class="relative">
+      <div class="absolute -left-10 md:-left-12 w-8 h-8 rounded-full bg-slate-100 border-2 border-slate-300 flex items-center justify-center font-black text-slate-600 text-sm z-10">A</div>
+      <div class="bg-white border border-ads-border rounded-xl p-5 shadow-sm">
+        <h3 class="font-bold text-slate-800 text-lg mb-2 flex items-center gap-2"><i data-lucide="edit-3" class="w-4 h-4 text-slate-400"></i>【準備段階】議題の本質を探る</h3>
+        <p class="text-sm text-ads-muted mb-3">会議の質は準備で決まります。「4つの思考レンズ（深さ・広さ・構造・時間）」を用い、アジェンダの本質を多角的に考えてから臨みます。</p>
+        <div class="bg-slate-50 border border-slate-100 rounded p-3 text-xs text-slate-600">
+          <strong class="text-slate-700">アクション：</strong> 主催者は目的とゴールを事前共有し、参加者は自分の意見・提案を最低1つ準備する。
+        </div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="absolute -left-10 md:-left-12 w-8 h-8 rounded-full bg-slate-100 border-2 border-slate-300 flex items-center justify-center font-black text-slate-600 text-sm z-10">B</div>
+      <div class="bg-white border border-ads-border rounded-xl p-5 shadow-sm">
+        <h3 class="font-bold text-slate-800 text-lg mb-2 flex items-center gap-2"><i data-lucide="message-circle" class="w-4 h-4 text-slate-400"></i>【議論・決定】羅針盤と共通言語で議論する</h3>
+        <p class="text-sm text-ads-muted mb-4">「事実・解釈・根拠」を共通言語として建設的な対話を行います。意思決定の際は、必ず「パーパス」に照らして判断します。</p>
+        
+        <div class="bg-red-50/50 border border-red-100 rounded-lg p-3">
+          <div class="flex items-center gap-1.5 font-bold text-red-700 mb-1 text-xs">
+            <i data-lucide="book-open" class="w-3.5 h-3.5"></i> 用語：バッドニュース・ファースト
+          </div>
+          <p class="text-xs text-red-900/80">
+            報告において、悪い情報（トラブルや遅れ）ほど最速で、事実のみを伝えること。隠蔽や遅れは致命傷になります。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="absolute -left-10 md:-left-12 w-8 h-8 rounded-full bg-slate-100 border-2 border-slate-300 flex items-center justify-center font-black text-slate-600 text-sm z-10">C</div>
+      <div class="bg-white border border-ads-border rounded-xl p-5 shadow-sm border-l-4 border-l-emerald-500">
+        <h3 class="font-bold text-slate-800 text-lg mb-2 flex items-center gap-2"><i data-lucide="check-square" class="w-4 h-4 text-emerald-500"></i>【決定・実行】ネクストアクションを明確にする</h3>
+        <p class="text-sm text-ads-muted mb-3">議論の最後には、必ず<strong class="text-slate-700 font-bold">「誰が」「何を」「いつまでに」</strong>やるか（実行責任）を明確にします。</p>
+        <div class="bg-emerald-50 border border-emerald-100 rounded p-3 text-xs text-emerald-800">
+          <strong class="font-bold">分解・細分化の徹底：</strong> 目標を具体的で実行可能な「最初の一歩（最小タスク）」にまで落とし込めているか確認します。
+        </div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="absolute -left-10 md:-left-12 w-8 h-8 rounded-full bg-slate-100 border-2 border-slate-300 flex items-center justify-center font-black text-slate-600 text-sm z-10">D</div>
+      <div class="bg-white border border-ads-border rounded-xl p-5 shadow-sm">
+        <h3 class="font-bold text-slate-800 text-lg mb-2 flex items-center gap-2"><i data-lucide="refresh-ccw" class="w-4 h-4 text-slate-400"></i>【振り返り】学びを定着させる</h3>
+        <p class="text-sm text-ads-muted">
+          会議の最後には、必ず「チェックアウト（振り返り）」の時間を設けます。<br>
+          「思考が深まった瞬間は？」「対話の空白地帯（信頼関係やパーパスの欠如）はなかったか？」を点検し、次へ繋げます。
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+  <footer class="max-w-3xl mx-auto px-5 pb-10 pt-6 border-t border-ads-border/30">
+    <p class="text-xs text-ads-dim text-center">NN図解ツールで作成</p>
+  </footer>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
