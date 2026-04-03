@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta property="og:title" content="活躍のための作戦会議：「方程式」で合意する">
+  <meta property="og:description" content="会議の沈黙や報告遅れを防ぎ、チームで前に進むための「方程式思考」を図解します。">
+  <meta property="og:type" content="article">
+  <title>活躍のための作戦会議：「方程式」で合意する</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FFFFFF'/><rect x='8' y='8' width='84' height='84' rx='14' fill='none' stroke='%233B82F6' stroke-width='4'/><circle cx='32' cy='40' r='10' fill='%233B82F6' opacity='0.8'/><circle cx='68' cy='40' r='10' fill='%2360A5FA' opacity='0.8'/><rect x='25' y='62' width='50' height='6' rx='3' fill='%2394A3B8' opacity='0.6'/><rect x='30' y='74' width='40' height='6' rx='3' fill='%2394A3B8' opacity='0.3'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ads: {
+              bg: '#FFFFFF',
+              surface: '#F8FAFC',
+              hover: '#F1F5F9',
+              border: '#E2E8F0',
+              accent: '#3B82F6',
+              'accent-light': '#2563EB',
+              text: '#1E293B',
+              muted: '#64748B',
+              dim: '#94A3B8',
+              positive: '#10B981',
+              negative: '#EF4444',
+              warning: '#F59E0B',
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans JP"', '"Hiragino Sans"', '"Hiragino Kaku Gothic ProN"', '"Yu Gothic UI"', '"Meiryo"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { border-top: none !important; }
+      .rounded-xl { break-inside: avoid; }
+      .md\:flex-row { flex-direction: row !important; }
+      .md\:hidden { display: none !important; }
+      .hidden.md\:block { display: block !important; }
+      .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+      .md\:mb-20 { margin-bottom: 5rem !important; }
+      .md\:py-16 { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+      .bg-clip-text.text-transparent {
+        -webkit-background-clip: initial !important;
+        background-clip: initial !important;
+        color: #2563EB !important;
+        -webkit-text-fill-color: #2563EB !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-ads-bg text-slate-600 antialiased leading-relaxed border-t-4 border-ads-accent">
+  <div class="no-print max-w-3xl mx-auto px-5 pt-2 flex justify-end">
+    <button onclick="window.print()" class="flex items-center gap-1.5 text-xs text-ads-dim hover:text-ads-accent transition-colors cursor-pointer">
+      <i data-lucide="download" class="w-3.5 h-3.5"></i>
+      PDF
+    </button>
+  </div>
+  <main class="max-w-3xl mx-auto px-5 py-10 md:py-16">
+<div class="text-center mb-8 md:mb-10">
+  <div class="inline-flex items-center gap-2 bg-ads-accent/10 text-ads-accent-light px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+    <i data-lucide="lightbulb" class="w-4 h-4"></i>
+    社長メッセージ
+  </div>
+  <h1 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-6">
+    「答え」ではなく<br>
+    <span class="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">「方程式」で合意する</span>
+  </h1>
+  <p class="text-lg text-ads-muted max-w-xl mx-auto leading-relaxed">
+    会議で沈黙が続く。トラブルの報告が遅れる。<br>
+    それは能力の問題ではなく、頭の中の「未確定の変数」が多すぎるからです。
+  </p>
+</div>
+
+<div class="bg-ads-surface border border-ads-border rounded-2xl p-6 md:p-10 mb-16 md:mb-20">
+  <div class="text-center mb-8">
+    <p class="text-xl md:text-2xl font-black text-slate-900 mb-2">
+      目指すのは「方程式の人」
+    </p>
+    <p class="text-sm text-ads-muted">前提が変わっても壊れない、前に進むための思考法</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white border border-red-500/20 rounded-xl p-6 shadow-sm">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4 text-red-600"></i>
+        </div>
+        <h3 class="font-bold text-slate-900">答えの人</h3>
+      </div>
+      <div class="bg-red-500/5 rounded-lg p-4 mb-4 text-sm text-slate-800 font-medium">
+        「Aプランでいきましょう」
+      </div>
+      <p class="text-sm text-ads-muted leading-relaxed">
+        結論に賭けるため、前提が変わった瞬間に答えが壊れ、「なぜAにした」と個人が責められます。
+      </p>
+    </div>
+
+    <div class="bg-white border border-emerald-500/30 rounded-xl p-6 shadow-sm ring-1 ring-emerald-500/10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+          <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+        </div>
+        <h3 class="font-bold text-slate-900">方程式の人</h3>
+      </div>
+      <div class="bg-emerald-500/5 rounded-lg p-4 mb-4 text-sm text-slate-800 font-medium">
+        「コスト重視ならA、スピード重視ならBです。現状はコスト重視が濃いので、いったんAで進めます」
+      </div>
+      <p class="text-sm text-ads-muted leading-relaxed">
+        分岐をつくるため、前提が変わっても壊れません。変数を差し替えるだけで次の答えが出ます。
+      </p>
+    </div>
+  </div>
+</div>
+
+<section class="mb-16 md:mb-20">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600/10 flex-shrink-0">
+      <i data-lucide="brain-circuit" class="w-5 h-5 text-blue-600"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-bold text-slate-900">思考が止まる本当の理由</h2>
+  </div>
+
+  <p class="mb-6 leading-relaxed">
+    「うちのメンバーは消極的だ」と解釈する前に、問い直すべきことがあります。多くの場合、原因は知識や経験の不足ではありません。
+  </p>
+
+  <div class="bg-ads-surface border border-ads-border rounded-xl p-6 mb-6">
+    <h3 class="text-sm font-bold text-slate-900 text-center mb-6">頭の中を占める「未確定の変数」</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="flex items-start gap-3 bg-white p-4 rounded-lg border border-ads-border/50">
+        <i data-lucide="help-circle" class="w-5 h-5 text-ads-dim flex-shrink-0 mt-0.5"></i>
+        <span class="text-sm">お客さまは何を最優先しているのか</span>
+      </div>
+      <div class="flex items-start gap-3 bg-white p-4 rounded-lg border border-ads-border/50">
+        <i data-lucide="help-circle" class="w-5 h-5 text-ads-dim flex-shrink-0 mt-0.5"></i>
+        <span class="text-sm">上司は何を重視しているのか（利益か、納期か、品質か）</span>
+      </div>
+      <div class="flex items-start gap-3 bg-white p-4 rounded-lg border border-ads-border/50">
+        <i data-lucide="help-circle" class="w-5 h-5 text-ads-dim flex-shrink-0 mt-0.5"></i>
+        <span class="text-sm">どう評価されるのか</span>
+      </div>
+      <div class="flex items-start gap-3 bg-white p-4 rounded-lg border border-ads-border/50">
+        <i data-lucide="help-circle" class="w-5 h-5 text-ads-dim flex-shrink-0 mt-0.5"></i>
+        <span class="text-sm">誰も傷つけない正解は何か</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-ads-muted leading-relaxed">
+    この状態でいきなり「最適解」を出そうとすると、変数が確定するまで口が開かなくなります。不確実性の扱い方を知らないだけなのです。
+  </p>
+</section>
+
+<section class="mb-16 md:mb-20">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-amber-500/10 flex-shrink-0">
+      <i data-lucide="scissors" class="w-5 h-5 text-amber-600"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-bold text-slate-900">変数を減らす。仮に固定する</h2>
+  </div>
+
+  <p class="mb-6 leading-relaxed">
+    数学の方程式と同じです。「x + y + z = 10」のままでは無数の組み合わせがあり選べません。しかし「いったん x = 1 と置こう」と仮定した瞬間、「y + z = 9」になり問題は一気にシンプルになります。
+  </p>
+
+  <div class="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6 mb-8">
+    <div class="flex flex-col md:flex-row gap-6 items-center">
+      <div class="flex-1 text-center">
+        <div class="text-2xl font-black text-slate-300 mb-2 line-through decoration-red-500 decoration-2">決定</div>
+        <p class="text-sm text-ads-muted">条件がすべて揃ってから、合理的に選ぶこと。</p>
+      </div>
+      <div class="w-px h-16 bg-amber-500/20 hidden md:block"></div>
+      <div class="flex-1 text-center">
+        <div class="text-2xl font-black text-amber-600 mb-2">決断</div>
+        <p class="text-sm text-ads-muted">条件が揃わない不確実な状況の中で、リスクを引き受けて変数を固定すること。</p>
+      </div>
+    </div>
+    <div class="mt-6 p-4 bg-white rounded-lg border border-amber-500/10 text-center text-sm">
+      <p class="font-medium text-slate-800 mb-1">当てずっぽうではありません。</p>
+      <p class="text-ads-muted">現時点の事実から最も確からしい仮説を置き、根拠を添えて固定します。違ったら入れ替えればいいのです。</p>
+    </div>
+  </div>
+</section>
+
+<section class="mb-16 md:mb-20">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-cyan-500/10 flex-shrink-0">
+      <i data-lucide="users" class="w-5 h-5 text-cyan-600"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-bold text-slate-900">言い訳ではなく「前提更新」で成果を守る</h2>
+  </div>
+
+  <p class="mb-6 leading-relaxed">
+    方程式は個人の頭の中に置かず、必ずチーム（上司と部下）で合意してください。これこそが「作戦会議」です。
+  </p>
+
+  <div class="space-y-4 mb-8">
+    <div class="flex items-start gap-4 bg-red-500/5 border border-red-500/20 p-5 rounded-xl">
+      <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5"></i>
+      <div>
+        <p class="font-bold text-red-700 mb-1">「答え」だけで合意する危険性</p>
+        <p class="text-sm text-ads-muted leading-relaxed">
+          「納期は2か月」「今日中に帰社する」という結論だけで合意すると、イレギュラーが起きた時に「誰が言ったか」「なぜできないのか」と犯人探しになり、バッドニュースが上がりにくくなります。
+        </p>
+      </div>
+    </div>
+    <div class="flex items-start gap-4 bg-cyan-500/5 border border-cyan-500/20 p-5 rounded-xl">
+      <i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-600 flex-shrink-0 mt-0.5"></i>
+      <div>
+        <p class="font-bold text-cyan-700 mb-1">「方程式（前提→結論）」で合意する</p>
+        <p class="text-sm text-ads-muted leading-relaxed">
+          「今の仕様なら2か月。仕様変更なら3か月」「15時までに試運転が終われば今日帰社。遅れれば明日帰社」と合意しておけば、前提が変わっても混乱しません。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-ads-surface border border-ads-border rounded-xl p-6">
+    <h3 class="font-bold text-slate-900 mb-4 text-center">リーダーに求める3つのサイクル</h3>
+    <p class="text-sm text-center text-ads-muted mb-6">前提が崩れたこと自体は「誰かの罪」ではなく、単に新しい情報を得たという事実です。</p>
+    
+    <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+      <div class="flex flex-col items-center flex-1 w-full bg-white p-4 rounded-lg border border-ads-border text-center">
+        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-500 mb-2">1</div>
+        <p class="text-sm font-bold text-slate-800 mb-1">前提を更新する</p>
+        <p class="text-xs text-ads-muted">何が変わったのかをバッドニュース・ファーストで言語化する。</p>
+      </div>
+      <i data-lucide="arrow-right" class="w-5 h-5 text-ads-dim hidden md:block"></i>
+      <i data-lucide="arrow-down" class="w-5 h-5 text-ads-dim md:hidden"></i>
+      
+      <div class="flex flex-col items-center flex-1 w-full bg-white p-4 rounded-lg border border-ads-border text-center">
+        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-500 mb-2">2</div>
+        <p class="text-sm font-bold text-slate-800 mb-1">方程式を組み直す</p>
+        <p class="text-xs text-ads-muted">この新しい前提なら何を優先するかを決め直す。</p>
+      </div>
+      <i data-lucide="arrow-right" class="w-5 h-5 text-ads-dim hidden md:block"></i>
+      <i data-lucide="arrow-down" class="w-5 h-5 text-ads-dim md:hidden"></i>
+      
+      <div class="flex flex-col items-center flex-1 w-full bg-white p-4 rounded-lg border border-ads-border text-center">
+        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-500 mb-2">3</div>
+        <p class="text-sm font-bold text-slate-800 mb-1">チームと合意する</p>
+        <p class="text-xs text-ads-muted">同じ前提なら同じ結論になる状態をつくる。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="flex items-center gap-3 mb-8">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-ads-accent/10 flex-shrink-0">
+      <i data-lucide="zap" class="w-5 h-5 text-ads-accent-light"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-bold text-slate-900">明日からのアクション（そのまま使える型）</h2>
+  </div>
+
+  <p class="mb-6 leading-relaxed">
+    判断を求められたとき、いきなり答えを出さないでください。まず「現時点で最も重要な前提（変数）」を整理し、次の型で伝えてみてください。
+  </p>
+
+  <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-6 md:p-8 mb-8">
+    <div class="space-y-4 text-base md:text-lg font-medium text-slate-800">
+      <p>「今回の判断には、<strong class="text-blue-700 bg-blue-100 px-2 py-0.5 rounded">〇〇という前提</strong>を置いています。</p>
+      <p>この前提なら結論はAです。もしこの〇〇が変われば、Bに切り替えます。</p>
+      <p>まずはこの前提で進めたいです。いかがでしょうか。」</p>
+    </div>
+  </div>
+
+  <div class="text-center bg-slate-50 border border-ads-border rounded-xl p-8">
+    <p class="text-sm text-ads-muted mb-4">会議で沈黙が続いたとき、あるいは現場が止まりそうなとき、こう口火を切ってください。</p>
+    <p class="text-xl font-bold text-slate-900 mb-6">
+      「いったん、〇〇を前提として考えてみませんか？」
+    </p>
+    <p class="text-ads-dim text-sm">その一言が空気を動かします。</p>
+    <p class="text-ads-dim text-sm mt-2">前提変更を共に乗り越える「100%当事者」のリーダーへ。</p>
+  </div>
+</section>
+
+</main>
+  <footer class="max-w-3xl mx-auto px-5 pb-10 pt-6 border-t border-ads-border/30">
+    <p class="text-xs text-ads-dim text-center">NN図解ツールで作成</p>
+  </footer>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
