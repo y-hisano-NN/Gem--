@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="NN図解ツール ── パーソナル図解スキルの全貌">
+  <meta property="og:description" content="AIと連携して、組織の思想・行動指針を美しいHTML図解として量産するスキルセットの紹介です。">
+  <meta property="og:type" content="article">
+  <title>NN図解ツール ── パーソナル図解スキルの全貌</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FFFFFF'/><rect x='8' y='8' width='84' height='84' rx='14' fill='none' stroke='%233B82F6' stroke-width='4'/><circle cx='32' cy='40' r='10' fill='%233B82F6' opacity='0.8'/><circle cx='68' cy='40' r='10' fill='%2360A5FA' opacity='0.8'/><rect x='25' y='62' width='50' height='6' rx='3' fill='%2394A3B8' opacity='0.6'/><rect x='30' y='74' width='40' height='6' rx='3' fill='%2394A3B8' opacity='0.3'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ads: {
+              bg: '#FFFFFF',
+              surface: '#F8FAFC',
+              hover: '#F1F5F9',
+              border: '#E2E8F0',
+              accent: '#3B82F6',
+              'accent-light': '#2563EB',
+              text: '#1E293B',
+              muted: '#64748B',
+              dim: '#94A3B8',
+              positive: '#10B981',
+              negative: '#EF4444',
+              warning: '#F59E0B',
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans JP"', '"Hiragino Sans"', '"Hiragino Kaku Gothic ProN"', '"Yu Gothic UI"', '"Meiryo"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { border-top: none !important; }
+      .rounded-xl { break-inside: avoid; }
+      .md\:flex-row { flex-direction: row !important; }
+      .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+      .md\:mb-20 { margin-bottom: 5rem !important; }
+      .md\:py-16 { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+    }
+  </style>
+</head>
+<body class="bg-ads-bg text-slate-600 antialiased leading-relaxed border-t-4 border-ads-accent">
+  <div class="no-print max-w-3xl mx-auto px-5 pt-2 flex justify-end">
+    <button onclick="window.print()" class="flex items-center gap-1.5 text-xs text-ads-dim hover:text-ads-accent transition-colors cursor-pointer">
+      <i data-lucide="download" class="w-3.5 h-3.5"></i>
+      PDF
+    </button>
+  </div>
+  <main class="max-w-3xl mx-auto px-5 py-10 md:py-16">
+
+    <!-- ヘッダー -->
+    <div class="text-center mb-10 md:mb-16">
+      <div class="inline-flex items-center gap-2 bg-ads-accent/10 text-ads-accent-light px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+        <i data-lucide="layout-template" class="w-4 h-4"></i>
+        パーソナル図解スキル
+      </div>
+      <h1 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-6 leading-tight">
+        NN<span class="text-ads-accent">図解ツール</span>
+      </h1>
+      <p class="text-lg text-ads-muted max-w-xl mx-auto leading-relaxed">
+        AIと連携して、組織の思想・行動指針を<br>
+        <strong class="text-slate-800">美しいHTML図解として量産する</strong>スキルセット
+      </p>
+    </div>
+
+    <!-- 一言定義 -->
+    <div class="bg-slate-900 text-white rounded-2xl p-6 md:p-10 mb-16 text-center">
+      <p class="text-xs text-slate-400 font-bold tracking-widest mb-4">このツールを一言で言うと</p>
+      <p class="text-xl md:text-2xl font-black leading-relaxed mb-6">
+        「<span class="text-blue-400">デザインの型</span>をAIに覚えさせ、<br>
+        コンテンツを渡すだけで<span class="text-emerald-400">統一感のある図解</span>を<br>
+        量産するワークフロー」
+      </p>
+      <div class="flex flex-wrap justify-center gap-2 text-xs">
+        <span class="bg-white/10 px-3 py-1 rounded-full">サーバー不要</span>
+        <span class="bg-white/10 px-3 py-1 rounded-full">HTMLファイル1つで完結</span>
+        <span class="bg-white/10 px-3 py-1 rounded-full">PDF出力対応</span>
+        <span class="bg-white/10 px-3 py-1 rounded-full">スマホ・PC対応</span>
+        <span class="bg-white/10 px-3 py-1 rounded-full">AI（Claude）で生成</span>
+      </div>
+    </div>
+
+    <!-- 生成プロセス -->
+    <section class="mb-16 md:mb-20">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-ads-accent/10 flex-shrink-0">
+          <i data-lucide="workflow" class="w-5 h-5 text-ads-accent"></i>
+        </div>
+        <div>
+          <div class="text-xs text-ads-dim font-medium tracking-widest">How it works</div>
+          <h2 class="text-xl md:text-2xl font-bold text-slate-900">図解ができるまで</h2>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <div class="flex items-start gap-4 bg-white border border-ads-border rounded-xl p-5">
+          <div class="w-9 h-9 bg-blue-600 text-white rounded-full flex items-center justify-center font-black text-sm flex-shrink-0 mt-0.5">1</div>
+          <div>
+            <div class="font-bold text-slate-900 mb-1">素材（テキスト）を用意する</div>
+            <p class="text-sm text-ads-muted">図解にしたいフレームワーク・思想・行動指針などのテキストを準備。箇条書きでも文章でも可。</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4 bg-white border border-ads-border rounded-xl p-5">
+          <div class="w-9 h-9 bg-blue-600 text-white rounded-full flex items-center justify-center font-black text-sm flex-shrink-0 mt-0.5">2</div>
+          <div>
+            <div class="font-bold text-slate-900 mb-1">Cursorに貼り付けて依頼する</div>
+            <p class="text-sm text-ads-muted">「このテキストを、既存ファイルと同じデザインシステムで図解HTMLにして」と指示するだけ。</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4 bg-white border border-ads-border rounded-xl p-5">
+          <div class="w-9 h-9 bg-blue-600 text-white rounded-full flex items-center justify-center font-black text-sm flex-shrink-0 mt-0.5">3</div>
+          <div>
+            <div class="font-bold text-slate-900 mb-1">ブラウザで確認・フィードバック</div>
+            <p class="text-sm text-ads-muted">HTMLファイルをブラウザで開いて見た目を確認。「このカードを2列にして」など自然な言葉で修正指示。</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4 bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+          <div class="w-9 h-9 bg-emerald-500 text-white rounded-full flex items-center justify-center font-black text-sm flex-shrink-0 mt-0.5">4</div>
+          <div>
+            <div class="font-bold text-emerald-900 mb-1">完成 → GitHubに保存・公開</div>
+            <p class="text-sm text-emerald-800/70">Gitでコミット・pushしてGitHub Pagesで公開。URLを関係者に共有できる。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5つの設計工夫 -->
+    <section class="mb-16 md:mb-20">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-purple-600/10 flex-shrink-0">
+          <i data-lucide="sparkles" class="w-5 h-5 text-purple-600"></i>
+        </div>
+        <div>
+          <div class="text-xs text-ads-dim font-medium tracking-widest">Design System</div>
+          <h2 class="text-xl md:text-2xl font-bold text-slate-900">5つの設計上の工夫</h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white border border-ads-border rounded-xl p-5">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="palette" class="w-4 h-4"></i>
+            </div>
+            <div class="font-bold text-slate-900">統一カラーシステム</div>
+          </div>
+          <p class="text-sm text-ads-muted leading-relaxed">全ファイルで同一のカラーパレット（<code class="bg-slate-100 px-1 rounded text-xs">ads-accent: #3B82F6</code> など）を使用。AIが毎回一貫したデザインを出力できる。</p>
+        </div>
+
+        <div class="bg-white border border-ads-border rounded-xl p-5">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="printer" class="w-4 h-4"></i>
+            </div>
+            <div class="font-bold text-slate-900">ワンクリックPDF出力</div>
+          </div>
+          <p class="text-sm text-ads-muted leading-relaxed">印刷用CSSを内蔵。ボタン1つで紙・PDF用にレイアウトが自動最適化され、配布資料として使える。</p>
+        </div>
+
+        <div class="bg-white border border-ads-border rounded-xl p-5">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="package" class="w-4 h-4"></i>
+            </div>
+            <div class="font-bold text-slate-900">ゼロ依存・1ファイル完結</div>
+          </div>
+          <p class="text-sm text-ads-muted leading-relaxed">外部依存はCDN経由のTailwind・Lucideのみ。サーバー不要で、HTMLファイル1つをどこでも開ける。</p>
+        </div>
+
+        <div class="bg-white border border-ads-border rounded-xl p-5">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="smartphone" class="w-4 h-4"></i>
+            </div>
+            <div class="font-bold text-slate-900">レスポンシブ対応</div>
+          </div>
+          <p class="text-sm text-ads-muted leading-relaxed">スマホ・タブレット・PCすべてで最適表示。Tailwindのブレークポイント（<code class="bg-slate-100 px-1 rounded text-xs">md:</code>）で自動切替。</p>
+        </div>
+
+        <div class="bg-white border border-ads-border rounded-xl p-5 md:col-span-2">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 bg-red-100 text-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="shield-off" class="w-4 h-4"></i>
+            </div>
+            <div class="font-bold text-slate-900">検索エンジン非公開設定</div>
+          </div>
+          <p class="text-sm text-ads-muted leading-relaxed"><code class="bg-slate-100 px-1 rounded text-xs">noindex / nofollow</code> メタタグを全ファイルに標準装備。URLを知っている人だけがアクセスでき、Google等には表示されない。社内資料・限定共有に最適。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使えるレイアウトパターン -->
+    <section class="mb-16 md:mb-20">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-amber-500/10 flex-shrink-0">
+          <i data-lucide="layout-grid" class="w-5 h-5 text-amber-600"></i>
+        </div>
+        <div>
+          <div class="text-xs text-ads-dim font-medium tracking-widest">Layout Patterns</div>
+          <h2 class="text-xl md:text-2xl font-bold text-slate-900">使えるレイアウトパターン</h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-ads-surface border border-ads-border rounded-xl p-4 text-center">
+          <div class="w-full h-16 bg-white border border-ads-border rounded-lg mb-3 flex gap-1.5 items-center justify-center p-2">
+            <div class="flex-1 h-full bg-blue-100 rounded"></div>
+            <div class="flex-1 h-full bg-emerald-100 rounded"></div>
+          </div>
+          <div class="font-bold text-sm text-slate-800 mb-1">対比カード</div>
+          <p class="text-xs text-ads-muted">2つの概念を左右に並べて比較。プレイヤー vs リーダーなど。</p>
+        </div>
+
+        <div class="bg-ads-surface border border-ads-border rounded-xl p-4 text-center">
+          <div class="w-full h-16 bg-white border border-ads-border rounded-lg mb-3 flex flex-col gap-1 items-center justify-center p-2">
+            <div class="w-full h-3 bg-purple-200 rounded"></div>
+            <div class="w-5/6 h-3 bg-emerald-200 rounded"></div>
+            <div class="w-4/6 h-3 bg-blue-200 rounded"></div>
+          </div>
+          <div class="font-bold text-sm text-slate-800 mb-1">階層ピラミッド</div>
+          <p class="text-xs text-ads-muted">3段階の成長レイヤーや優先順位の表現に最適。</p>
+        </div>
+
+        <div class="bg-ads-surface border border-ads-border rounded-xl p-4 text-center">
+          <div class="w-full h-16 bg-white border border-ads-border rounded-lg mb-3 flex items-center justify-center p-2 gap-1">
+            <div class="w-8 h-8 bg-blue-100 rounded-full flex-shrink-0"></div>
+            <div class="flex-1 h-2 bg-slate-200 rounded"></div>
+            <div class="w-8 h-8 bg-emerald-100 rounded-full flex-shrink-0"></div>
+            <div class="flex-1 h-2 bg-slate-200 rounded"></div>
+            <div class="w-8 h-8 bg-amber-100 rounded-full flex-shrink-0"></div>
+          </div>
+          <div class="font-bold text-sm text-slate-800 mb-1">ステップフロー</div>
+          <p class="text-xs text-ads-muted">プロセス・手順を矢印でつなぎ順序を視覚化。</p>
+        </div>
+
+        <div class="bg-ads-surface border border-ads-border rounded-xl p-4 text-center">
+          <div class="w-full h-16 bg-white border border-ads-border rounded-lg mb-3 grid grid-cols-2 gap-1 p-2">
+            <div class="bg-blue-100 rounded text-[8px] flex items-center justify-center font-bold text-blue-600">①</div>
+            <div class="bg-emerald-100 rounded text-[8px] flex items-center justify-center font-bold text-emerald-600">②</div>
+            <div class="bg-amber-100 rounded text-[8px] flex items-center justify-center font-bold text-amber-600">③</div>
+            <div class="bg-slate-100 rounded text-[8px] flex items-center justify-center font-bold text-slate-600">④</div>
+          </div>
+          <div class="font-bold text-sm text-slate-800 mb-1">2×2マトリクス</div>
+          <p class="text-xs text-ads-muted">対話の4象限など、2軸で4つの象限に分類。</p>
+        </div>
+
+        <div class="bg-ads-surface border border-ads-border rounded-xl p-4 text-center">
+          <div class="w-full h-16 bg-white border border-ads-border rounded-lg mb-3 flex flex-col gap-1 p-2">
+            <div class="flex gap-1 items-center">
+              <div class="w-4 h-4 bg-blue-200 rounded-full flex-shrink-0"></div>
+              <div class="flex-1 h-2 bg-slate-100 rounded"></div>
+            </div>
+            <div class="flex gap-1 items-center">
+              <div class="w-4 h-4 bg-blue-200 rounded-full flex-shrink-0"></div>
+              <div class="flex-1 h-2 bg-slate-100 rounded"></div>
+            </div>
+            <div class="flex gap-1 items-center">
+              <div class="w-4 h-4 bg-blue-200 rounded-full flex-shrink-0"></div>
+              <div class="flex-1 h-2 bg-slate-100 rounded"></div>
+            </div>
+          </div>
+          <div class="font-bold text-sm text-slate-800 mb-1">番号付きリスト</div>
+          <p class="text-xs text-ads-muted">行動指針・原則など、箇条書きを読みやすく整形。</p>
+        </div>
+
+        <div class="bg-ads-surface border border-ads-border rounded-xl p-4 text-center">
+          <div class="w-full h-16 bg-white border border-ads-border rounded-lg mb-3 flex items-center justify-center p-2">
+            <div class="border-l-4 border-blue-400 pl-3 text-left">
+              <div class="h-2 w-16 bg-slate-200 rounded mb-1"></div>
+              <div class="h-1.5 w-24 bg-slate-100 rounded"></div>
+            </div>
+          </div>
+          <div class="font-bold text-sm text-slate-800 mb-1">引用ブロック</div>
+          <p class="text-xs text-ads-muted">哲学者・著名人の言葉を視覚的に強調して引用。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 作成実績 -->
+    <section class="mb-16 md:mb-20">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-500/10 flex-shrink-0">
+          <i data-lucide="files" class="w-5 h-5 text-emerald-600"></i>
+        </div>
+        <div>
+          <div class="text-xs text-ads-dim font-medium tracking-widest">Works</div>
+          <h2 class="text-xl md:text-2xl font-bold text-slate-900">作成実績</h2>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <a href="naganetsu-compass-standard.html" class="flex items-center gap-4 bg-white border border-ads-border hover:border-blue-300 hover:bg-blue-50/30 rounded-xl p-4 transition-colors group">
+          <div class="w-9 h-9 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i data-lucide="cpu" class="w-4 h-4"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-slate-900 text-sm group-hover:text-blue-700">COMPASS Standard</div>
+            <div class="text-xs text-ads-muted truncate">新時代を切り拓く思考OSの全体像と実践ロードマップ</div>
+          </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-ads-dim group-hover:text-blue-500 flex-shrink-0"></i>
+        </a>
+
+        <a href="naganetsu-compass-vol1.html" class="flex items-center gap-4 bg-white border border-ads-border hover:border-blue-300 hover:bg-blue-50/30 rounded-xl p-4 transition-colors group">
+          <div class="w-9 h-9 bg-slate-800 text-white rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-black">V1</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-slate-900 text-sm group-hover:text-blue-700">COMPASS Vol.1：思考と在り方のOS</div>
+            <div class="text-xs text-ads-muted truncate">思考習慣とリーダーシップの覚悟</div>
+          </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-ads-dim group-hover:text-blue-500 flex-shrink-0"></i>
+        </a>
+
+        <a href="naganetsu-compass-vol2.html" class="flex items-center gap-4 bg-white border border-ads-border hover:border-blue-300 hover:bg-blue-50/30 rounded-xl p-4 transition-colors group">
+          <div class="w-9 h-9 bg-emerald-600 text-white rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-black">V2</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-slate-900 text-sm group-hover:text-blue-700">COMPASS Vol.2：OSの実践と訓練</div>
+            <div class="text-xs text-ads-muted truncate">対話の4象限と会議の心得</div>
+          </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-ads-dim group-hover:text-blue-500 flex-shrink-0"></i>
+        </a>
+
+        <a href="naganetsu-compass-vol3.html" class="flex items-center gap-4 bg-white border border-ads-border hover:border-blue-300 hover:bg-blue-50/30 rounded-xl p-4 transition-colors group">
+          <div class="w-9 h-9 bg-purple-700 text-white rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-black">V3</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-slate-900 text-sm group-hover:text-blue-700">COMPASS Vol.3：成長と行動</div>
+            <div class="text-xs text-ads-muted truncate">価値提供の3階層と仕事を面白がること</div>
+          </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-ads-dim group-hover:text-blue-500 flex-shrink-0"></i>
+        </a>
+
+        <a href="naganetsu-action-guidelines.html" class="flex items-center gap-4 bg-white border border-ads-border hover:border-blue-300 hover:bg-blue-50/30 rounded-xl p-4 transition-colors group">
+          <div class="w-9 h-9 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i data-lucide="footprints" class="w-4 h-4"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-slate-900 text-sm group-hover:text-blue-700">ナガネツの行動指針</div>
+            <div class="text-xs text-ads-muted truncate">Do / Be / Result の3層・全16箇条</div>
+          </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-ads-dim group-hover:text-blue-500 flex-shrink-0"></i>
+        </a>
+
+        <a href="naganetsu-flower-leadership.html" class="flex items-center gap-4 bg-white border border-ads-border hover:border-emerald-300 hover:bg-emerald-50/30 rounded-xl p-4 transition-colors group">
+          <div class="w-9 h-9 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i data-lucide="flower-2" class="w-4 h-4"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-slate-900 text-sm group-hover:text-emerald-700">花を引っ張っても咲かない</div>
+            <div class="text-xs text-ads-muted truncate">上司の器の正体 ── 環境を整える力</div>
+          </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-ads-dim group-hover:text-emerald-500 flex-shrink-0"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- 締め -->
+    <div class="bg-gradient-to-b from-blue-50 to-white border border-blue-100 rounded-2xl p-8 text-center">
+      <i data-lucide="zap" class="w-8 h-8 text-blue-400 mx-auto mb-4"></i>
+      <p class="text-lg font-bold text-slate-900 mb-3">「型」があるから、量産できる</p>
+      <p class="text-sm text-ads-muted max-w-lg mx-auto leading-relaxed">
+        デザインシステムという共通の型をAIと共有することで、<br>
+        コンテンツさえあれば誰でも・何度でも・一貫したクオリティで図解を生成できる。<br>
+        これがNN図解ツールの本質です。
+      </p>
+    </div>
+
+  </main>
+  <footer class="max-w-3xl mx-auto px-5 pb-10 pt-6 border-t border-ads-border/30">
+    <p class="text-xs text-ads-dim text-center">NN図解ツールで作成</p>
+  </footer>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
