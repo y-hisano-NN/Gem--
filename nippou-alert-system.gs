@@ -49,23 +49,24 @@ const CONFIG = {
   CYBOZU_APP_ID: 'your-app-id',
 
   /**
-   * 日報CSVの列定義（自社のカスタムアプリ設定に合わせて変更してください）
-   * 【確認方法】サイボウズOfficeでCSVを1件だけ手動で書き出して列名を確認する
-   * 例: { name: 0, department: 1, date: 2, body: 3 } → 0列目が氏名、3列目が本文
+   * 日報CSVの列定義（実際のCSVヘッダーを確認して設定済み）
+   * ヘッダー: 日報日付(0), 氏名(1), 所属部署(2), 本日の業務内容(3), 気づき(4), 明日の予定(5)
    */
   CSV_COLUMNS: {
-    name:       0,   // 投稿者名の列番号（0始まり）
-    department: 1,   // 部署名の列番号
-    date:       2,   // 投稿日の列番号
-    body:       3,   // 日報本文の列番号
+    date:       0,   // 日報日付
+    name:       1,   // 氏名
+    department: 2,   // 所属部署
+    body:       3,   // 本日の業務内容（列4「気づき」・列5「明日の予定」も結合して渡す）
+    notes:      4,   // 気づき
+    tomorrow:   5,   // 明日の予定
   },
 
   // ── Gemini API ────────────────────────────────────────────────────────────
   /** Gemini APIキー（スクリプトプロパティで管理推奨） */
   GEMINI_API_KEY: PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY') || '',
 
-  /** 使用するGeminiモデル */
-  GEMINI_MODEL: 'gemini-1.5-pro',
+  /** 使用するGeminiモデル（2026年4月時点の推奨モデル） */
+  GEMINI_MODEL: 'gemini-2.5-flash',
 
   // ── Gmail ─────────────────────────────────────────────────────────────────
   /** 送信先メールアドレス（社長） */
@@ -190,60 +191,98 @@ function formatDateJp(dateStr) {
  */
 
 /**
- * サイボウズOfficeにセッション認証でログインし、クッキーを返す
+ * レスポンスの Set-Cookie ヘッダーを "name=value" の文字列に変換して返す
  *
- * @returns {string} セッションクッキー文字列
+ * @param {HTTPResponse} response
+ * @returns {string}
+ */
+function extractCookies_(response) {
+  const raw = response.getAllHeaders()['Set-Cookie'];
+  if (!raw) return '';
+  const list = Array.isArray(raw) ? raw : [raw];
+  return list.map(c => c.split(';')[0]).join('; ');
+}
+
+/**
+ * サイボウズOfficeにJSON方式でログインし、セッションCookieを返す
+ *
+ * 【ログインの仕組み（DevToolsで確認済み）】
+ *   STEP1: GET /o/ でページを取得し、_REQUEST_TOKEN_（CSRFトークン）を抽出する
+ *   STEP2: POST /o/login.json へ JSON で username/password/_REQUEST_TOKEN_ を送信
+ *   STEP3: レスポンスの Set-Cookie から JSESSIONID を含む Cookie を取得する
+ *
+ * @returns {string} セッションCookie文字列（後続リクエストのCookieヘッダーに使用）
  */
 function loginToCybozuOffice() {
   const user     = CONFIG.CYBOZU_USER;
   const password = CONFIG.CYBOZU_PASSWORD;
-  const loginUrl = `https://${CONFIG.CYBOZU_SUBDOMAIN}.cybozu.com/o/`;
+  const baseUrl  = `https://${CONFIG.CYBOZU_SUBDOMAIN}.cybozu.com`;
 
   if (!user || !password) {
     throw new Error('CYBOZU_USER または CYBOZU_PASSWORD がスクリプトプロパティに未設定です。');
   }
 
-  // ─── フォームPOSTでログイン ─────────────────────────────────────────────
-  // ※ パラメータ名（_Account, Password）はDevToolsで実際のフォームを確認してください。
-  //   サイボウズOfficeのバージョン・設定によって異なる場合があります。
-  const loginOptions = {
-    method:           'post',
-    payload:          { '_Account': user, 'Password': password },
-    followRedirects:  false,   // リダイレクト前のSet-Cookieを取得するため
+  // ─── STEP 1: ログインページを取得して _REQUEST_TOKEN_ を抽出 ─────────────
+  const pageRes     = UrlFetchApp.fetch(`${baseUrl}/o/`, { muteHttpExceptions: true });
+  const pageHtml    = pageRes.getContentText();
+  const pageCookies = extractCookies_(pageRes);
+
+  // HTML内から _REQUEST_TOKEN_ を複数パターンで検索
+  let requestToken = null;
+  const tokenPatterns = [
+    /"_REQUEST_TOKEN_"\s*:\s*"([^"]+)"/,
+    /'_REQUEST_TOKEN_'\s*:\s*'([^']+)'/,
+    /name="_REQUEST_TOKEN_"\s+value="([^"]+)"/,
+    /name='_REQUEST_TOKEN_'\s+value='([^']+)'/,
+    /requestToken['":\s]+([0-9a-f-]{36})/i,
+  ];
+  for (const pattern of tokenPatterns) {
+    const match = pageHtml.match(pattern);
+    if (match) { requestToken = match[1]; break; }
+  }
+
+  if (requestToken) {
+    Logger.log(`[LOGIN] _REQUEST_TOKEN_ 取得成功: ${requestToken.substring(0, 8)}...`);
+  } else {
+    Logger.log('[LOGIN] _REQUEST_TOKEN_ がHTMLに見つかりませんでした。トークンなしで続行します。');
+  }
+
+  // ─── STEP 2: JSON POSTでログイン ─────────────────────────────────────────
+  const loginUrl = `${baseUrl}/o/login.json?_lc=ja`;
+  const body     = { username: user, password: password, keepUsername: true, redirect: '' };
+  if (requestToken) body['_REQUEST_TOKEN_'] = requestToken;
+
+  const loginRes    = UrlFetchApp.fetch(loginUrl, {
+    method:             'post',
+    contentType:        'application/json',
+    payload:            JSON.stringify(body),
+    headers:            { 'Cookie': pageCookies },
+    followRedirects:    false,
     muteHttpExceptions: true,
-  };
+  });
+  const loginStatus = loginRes.getResponseCode();
 
-  const loginResponse = UrlFetchApp.fetch(loginUrl, loginOptions);
-  const loginStatus   = loginResponse.getResponseCode();
-
-  // ログイン成功は 200 or 302（リダイレクト）
   if (loginStatus !== 200 && loginStatus !== 302) {
     throw new Error(
       `サイボウズOfficeへのログイン失敗: HTTPステータス ${loginStatus}\n` +
-      `ログインURL: ${loginUrl}\n` +
-      `※ SAML/SSO設定でパスワード認証が無効になっている可能性があります。`
+      `レスポンス: ${loginRes.getContentText().substring(0, 300)}`
     );
   }
 
-  // ─── セッションクッキーの抽出 ────────────────────────────────────────────
-  const allHeaders  = loginResponse.getAllHeaders();
-  const setCookies  = allHeaders['Set-Cookie'];
+  // ─── STEP 3: JSESSIONID を含む Cookie を取得 ─────────────────────────────
+  const loginCookies = extractCookies_(loginRes);
 
-  if (!setCookies) {
-    throw new Error(
-      'ログインレスポンスにSet-Cookieヘッダーがありません。\n' +
-      'ログインURL・パラメータ名が正しいか確認してください。\n' +
-      `現在のログインURL: ${loginUrl}`
-    );
+  // ページCookieとログインCookieを結合（両方必要な場合に備える）
+  const allCookies = [pageCookies, loginCookies].filter(Boolean).join('; ');
+
+  if (!allCookies.includes('JSESSIONID')) {
+    Logger.log('[WARN] JSESSIONID が Cookie に見つかりません。ログイン失敗の可能性があります。');
+    Logger.log(`[DEBUG] 取得Cookie: ${allCookies.substring(0, 100)}`);
+  } else {
+    Logger.log(`[LOGIN] ログイン成功（JSESSIONID取得済み）`);
   }
 
-  // Set-Cookie は配列または文字列で返る。クッキー値（セミコロン前）を結合する
-  const cookieString = Array.isArray(setCookies)
-    ? setCookies.map(c => c.split(';')[0]).join('; ')
-    : setCookies.split(';')[0];
-
-  Logger.log(`[LOGIN] セッションクッキー取得成功: ${cookieString.substring(0, 40)}...`);
-  return cookieString;
+  return allCookies;
 }
 
 /**
@@ -321,7 +360,6 @@ function fetchCybozuDailyReports(date) {
 function parseCsvToReports(csvText, date) {
   const col = CONFIG.CSV_COLUMNS;
 
-  // CSV を行に分割（RFC 4180 準拠の簡易パーサー）
   const rows = parseCsv(csvText);
 
   if (rows.length <= 1) {
@@ -329,16 +367,24 @@ function parseCsvToReports(csvText, date) {
     return [];
   }
 
-  // 1行目はヘッダー行なのでスキップ
   const dataRows = rows.slice(1);
 
   return dataRows
-    .map(row => ({
-      name:       (row[col.name]       || '不明').trim(),
-      department: (row[col.department] || '不明').trim(),
-      date:       (row[col.date]       || date).trim().replace(/\//g, '-').substring(0, 10),
-      body:       (row[col.body]       || '').trim(),
-    }))
+    .map(row => {
+      // 「本日の業務内容」「気づき」「明日の予定」を結合してAIに渡す（解析精度向上）
+      const bodyParts = [
+        row[col.body]     ? `【本日の業務内容】\n${row[col.body].trim()}`     : '',
+        row[col.notes]    ? `【気づき】\n${row[col.notes].trim()}`            : '',
+        row[col.tomorrow] ? `【明日の予定】\n${row[col.tomorrow].trim()}`     : '',
+      ].filter(Boolean);
+
+      return {
+        name:       (row[col.name]       || '不明').trim(),
+        department: (row[col.department] || '不明').trim(),
+        date:       (row[col.date]       || date).trim().replace(/\//g, '-').substring(0, 10),
+        body:       bodyParts.join('\n\n'),
+      };
+    })
     .filter(r => r.body !== '');
 }
 
@@ -406,9 +452,10 @@ function parseCsv(csv) {
  * @returns {{alerts: Array}} - Geminiが返すJSONオブジェクト
  */
 function analyzeWithGemini(reports, targetDate) {
+  // APIキーはURLではなくヘッダーで渡す（ログへの漏洩を防ぐため）
   const endpoint =
     `https://generativelanguage.googleapis.com/v1beta/models/` +
-    `${CONFIG.GEMINI_MODEL}:generateContent?key=${CONFIG.GEMINI_API_KEY}`;
+    `${CONFIG.GEMINI_MODEL}:generateContent`;
 
   // 日報テキストをひとまとめにしてプロンプトへ埋め込む
   const reportsText = reports.map((r, i) =>
@@ -476,9 +523,10 @@ alertsが空の場合は {"alerts": []} を返すこと。`;
   };
 
   const options = {
-    method: 'post',
+    method:      'post',
     contentType: 'application/json',
-    payload: JSON.stringify(requestBody),
+    headers:     { 'x-goog-api-key': CONFIG.GEMINI_API_KEY },
+    payload:     JSON.stringify(requestBody),
     muteHttpExceptions: true,
   };
 
