@@ -122,7 +122,7 @@
           <!-- Gemini -->
           <div class="flex-1 w-full bg-violet-50 border border-violet-200 rounded-xl p-4 text-center">
             <div class="text-2xl mb-2">🤖</div>
-            <div class="font-bold text-violet-800 text-sm">Gemini 1.5 Pro</div>
+            <div class="font-bold text-violet-800 text-sm">Gemini 2.5 Flash</div>
             <div class="text-xs text-violet-600 mt-1">3段階AI解析</div>
           </div>
 
@@ -149,7 +149,7 @@
           <div class="flex-1 w-full bg-white border border-amber-200 rounded-xl px-4 py-3 text-center">
             <div class="text-lg mb-1">🔐</div>
             <div class="text-xs font-bold text-amber-800">STEP 1：ログイン</div>
-            <div class="text-xs text-amber-600 mt-1">ID/パスワードで<br>セッション取得</div>
+            <div class="text-xs text-amber-600 mt-1">JSON POST＋<br>CSRFトークン付き</div>
           </div>
           <div class="text-amber-300 text-base rotate-90 md:rotate-0">→</div>
           <div class="flex-1 w-full bg-white border border-amber-200 rounded-xl px-4 py-3 text-center">
@@ -586,17 +586,21 @@
           <div class="pl-11">
             <div class="bg-slate-900 rounded-lg p-4 text-xs font-mono leading-relaxed overflow-x-auto">
               <div class="text-slate-400 mb-2">// ▼ ステップ0で確認した値を設定する</div>
-              <div><span class="text-blue-300">CYBOZU_SUBDOMAIN</span><span class="text-slate-300">: </span><span class="text-green-300">'naganetsu'</span><span class="text-slate-400">,  // サブドメイン（xxx.cybozu.comのxxx）</span></div>
-              <div><span class="text-blue-300">CYBOZU_APP_ID</span><span class="text-slate-300">:    </span><span class="text-green-300">'123'</span><span class="text-slate-400">,         // ステップ0で確認したpidの値</span></div>
-              <div class="mt-2"><span class="text-blue-300">CSV_COLUMNS</span><span class="text-slate-300">: {</span><span class="text-slate-400">  // 手動CSVで確認した列番号（0始まり）</span></div>
-              <div class="ml-4"><span class="text-blue-300">name</span><span class="text-slate-300">: </span><span class="text-yellow-300">0</span><span class="text-slate-300">,</span><span class="text-slate-400">       // 投稿者名が何列目か</span></div>
-              <div class="ml-4"><span class="text-blue-300">department</span><span class="text-slate-300">: </span><span class="text-yellow-300">1</span><span class="text-slate-300">,</span><span class="text-slate-400">  // 部署名が何列目か</span></div>
-              <div class="ml-4"><span class="text-blue-300">date</span><span class="text-slate-300">: </span><span class="text-yellow-300">2</span><span class="text-slate-300">,</span><span class="text-slate-400">       // 日付が何列目か</span></div>
-              <div class="ml-4"><span class="text-blue-300">body</span><span class="text-slate-300">: </span><span class="text-yellow-300">3</span><span class="text-slate-300">,</span><span class="text-slate-400">       // 日報本文が何列目か</span></div>
+              <div><span class="text-blue-300">CYBOZU_SUBDOMAIN</span><span class="text-slate-300">: </span><span class="text-green-300">'naganetsu'</span><span class="text-slate-400">,  // サブドメイン（URLバーで確認）</span></div>
+              <div><span class="text-blue-300">CYBOZU_APP_ID</span><span class="text-slate-300">:    </span><span class="text-green-300">'???'</span><span class="text-slate-400">,         // DevToolsでpid=の数字を確認</span></div>
+              <div class="mt-2 text-slate-400">// ▼ CSV列番号（実際のCSVで確認済み ✅）</div>
+              <div><span class="text-blue-300">CSV_COLUMNS</span><span class="text-slate-300">: {</span></div>
+              <div class="ml-4"><span class="text-blue-300">date</span><span class="text-slate-300">:       </span><span class="text-yellow-300">0</span><span class="text-slate-300">,</span><span class="text-slate-400">  // 日報日付</span></div>
+              <div class="ml-4"><span class="text-blue-300">name</span><span class="text-slate-300">:       </span><span class="text-yellow-300">1</span><span class="text-slate-300">,</span><span class="text-slate-400">  // 氏名</span></div>
+              <div class="ml-4"><span class="text-blue-300">department</span><span class="text-slate-300">: </span><span class="text-yellow-300">2</span><span class="text-slate-300">,</span><span class="text-slate-400">  // 所属部署</span></div>
+              <div class="ml-4"><span class="text-blue-300">body</span><span class="text-slate-300">:       </span><span class="text-yellow-300">3</span><span class="text-slate-300">,</span><span class="text-slate-400">  // 本日の業務内容</span></div>
+              <div class="ml-4"><span class="text-blue-300">notes</span><span class="text-slate-300">:      </span><span class="text-yellow-300">4</span><span class="text-slate-300">,</span><span class="text-slate-400">  // 気づき（AIに渡して解析精度向上）</span></div>
+              <div class="ml-4"><span class="text-blue-300">tomorrow</span><span class="text-slate-300">:   </span><span class="text-yellow-300">5</span><span class="text-slate-300">,</span><span class="text-slate-400">  // 明日の予定（同上）</span></div>
               <div><span class="text-slate-300">},</span></div>
-              <div class="mt-2"><span class="text-blue-300">RECIPIENT_EMAIL</span><span class="text-slate-300">: </span><span class="text-green-300">'shacho@naganetsu.co.jp'</span><span class="text-slate-300">,</span></div>
+              <div class="mt-2"><span class="text-blue-300">GEMINI_MODEL</span><span class="text-slate-300">:   </span><span class="text-green-300">'gemini-2.5-flash'</span><span class="text-slate-300">,</span><span class="text-slate-400">  // 2026年4月推奨</span></div>
+              <div><span class="text-blue-300">RECIPIENT_EMAIL</span><span class="text-slate-300">: </span><span class="text-green-300">'shacho@naganetsu.co.jp'</span><span class="text-slate-300">,</span></div>
             </div>
-            <p class="text-xs text-slate-400 mt-2">💡 CSV_COLUMNS は、1件だけ手動でCSVをダウンロードしてExcelで開き、0列目から何列目に何があるかを確認してください。</p>
+            <p class="text-xs text-slate-400 mt-2">✅ CSV列番号は手動ダウンロードで確認済み。<code class="bg-slate-100 px-1 rounded">CYBOZU_APP_ID</code> のみDevToolsで確認が必要です。</p>
           </div>
         </div>
 
@@ -604,13 +608,13 @@
         <div class="bg-white border border-slate-200 rounded-2xl p-5 md:p-6">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-8 h-8 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-black text-sm flex-shrink-0">D</div>
-            <h3 class="font-black text-slate-900">debugCybozuApi() でログイン・CSV取得を確認</h3>
+            <h3 class="font-black text-slate-900">testRun() で動作確認</h3>
           </div>
           <ol class="space-y-2 text-sm text-slate-600 pl-11">
-            <li class="flex items-start gap-2"><span class="text-slate-400 font-bold flex-shrink-0">1.</span>GASエディタのドロップダウンで <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">debugCybozuApi</code> を選択 → ▶ 実行</li>
-            <li class="flex items-start gap-2"><span class="text-slate-400 font-bold flex-shrink-0">2.</span>ログに <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">[LOGIN] セッションクッキー取得成功</code> と表示されればログイン成功</li>
-            <li class="flex items-start gap-2"><span class="text-slate-400 font-bold flex-shrink-0">3.</span>続けて <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">testRun</code> を実行。ログに「取得件数 / 解析結果 / HTML文字数」が表示されれば成功</li>
-            <li class="flex items-start gap-2"><span class="text-slate-400 font-bold flex-shrink-0">4.</span>CSV列番号がずれている場合は <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">CSV_COLUMNS</code> を修正</li>
+            <li class="flex items-start gap-2"><span class="text-slate-400 font-bold flex-shrink-0">1.</span>GASエディタのドロップダウンで <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">testRun</code> を選択 → ▶ 実行（初回は権限承認が求められます）</li>
+            <li class="flex items-start gap-2"><span class="text-slate-400 font-bold flex-shrink-0">2.</span>ログに <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">[LOGIN] ログイン成功（JSESSIONID取得済み）</code> と表示されればログイン成功</li>
+            <li class="flex items-start gap-2"><span class="text-slate-400 font-bold flex-shrink-0">3.</span>続けてログに「取得件数 / 解析結果 / HTML文字数」が表示されれば全工程成功</li>
+            <li class="flex items-start gap-2"><span class="text-slate-400 font-bold flex-shrink-0">4.</span><code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">[WARN] _REQUEST_TOKEN_が見つかりません</code> が出ても、その後ログイン成功であれば問題なし</li>
           </ol>
         </div>
 
@@ -833,10 +837,10 @@
           <div><span class="text-slate-400">nippou-alert-system.gs</span></div>
           <div class="ml-4"><span class="text-yellow-300">main()</span><span class="text-slate-400">                    ← トリガーから呼び出すエントリーポイント</span></div>
           <div class="ml-4 mt-1"><span class="text-slate-500">├─ </span><span class="text-blue-300">getYesterdayDate()</span><span class="text-slate-400">      前日日付を YYYY-MM-DD で返す</span></div>
-          <div class="ml-4"><span class="text-slate-500">├─ </span><span class="text-blue-300">loginToCybozuOffice()</span><span class="text-slate-400">     セッション認証してCookieを取得</span></div>
+          <div class="ml-4"><span class="text-slate-500">├─ </span><span class="text-blue-300">loginToCybozuOffice()</span><span class="text-slate-400">     JSON POST＋CSRFトークンでログイン・JSESSIONID取得</span></div>
           <div class="ml-4"><span class="text-slate-500">├─ </span><span class="text-blue-300">fetchCybozuDailyReports()</span><span class="text-slate-400"> Cookie付きでCSVをダウンロード・解析</span></div>
           <div class="ml-4"><span class="text-slate-500">├─ </span><span class="text-blue-300">parseCsvToReports()</span><span class="text-slate-400">       CSV文字列を日報データ配列に変換</span></div>
-          <div class="ml-4"><span class="text-slate-500">├─ </span><span class="text-violet-300">analyzeWithGemini()</span><span class="text-slate-400">     Gemini API で3段階解析 → JSON</span></div>
+          <div class="ml-4"><span class="text-slate-500">├─ </span><span class="text-violet-300">analyzeWithGemini()</span><span class="text-slate-400">     Gemini 2.5 Flash で3段階解析 → JSON</span></div>
           <div class="ml-4"><span class="text-slate-500">├─ </span><span class="text-green-300">generateHtmlEmail()</span><span class="text-slate-400">     色分けHTMLレポートメールを生成</span></div>
           <div class="ml-4"><span class="text-slate-500">├─ </span><span class="text-green-300">sendAlertEmail()</span><span class="text-slate-400">        GmailApp でメール送信</span></div>
           <div class="ml-4 mt-1"><span class="text-slate-500">├─ </span><span class="text-orange-300">createDailyTrigger()</span><span class="text-slate-400">    毎日8時のトリガーを登録（初回のみ）</span></div>
@@ -848,7 +852,7 @@
 
     <!-- フッター -->
     <div class="text-center text-xs text-slate-400 pt-4 border-t border-slate-100">
-      日報AI解析アラートシステム 構築ガイド ／ GAS × Gemini 1.5 Pro × サイボウズOffice
+      日報AI解析アラートシステム 構築ガイド ／ GAS × Gemini 2.5 Flash × サイボウズOffice
     </div>
 
   </main>
