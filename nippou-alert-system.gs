@@ -26,54 +26,37 @@
 // ▼ 設定値（自社環境に合わせて変更してください）
 // ===========================================================================
 const CONFIG = {
-  // ── サイボウズOffice ──────────────────────────────────────────────────────
-  /** サイボウズOfficeのサブドメイン（例: "nagamatsu" → nagamatsu.cybozu.com） */
-  CYBOZU_SUBDOMAIN: 'your-subdomain',
+  // ── サイボウズOffice（DevToolsで確認済みの値）────────────────────────────
+  CYBOZU_SUBDOMAIN: 'jjtsk30j23wk',   // URLバーで確認済み
 
-  /**
-   * ログインID（スクリプトプロパティで管理推奨）
-   * ※ SAML/SSO（Google連携など）を使っている場合はセッション認証が使えない場合があります。
-   *   その場合はサイボウズ管理者に「パスワード認証」が有効か確認してください。
-   */
-  CYBOZU_USER: PropertiesService.getScriptProperties().getProperty('CYBOZU_USER') || '',
-
-  /** パスワード（スクリプトプロパティで管理推奨） */
+  CYBOZU_USER:     PropertiesService.getScriptProperties().getProperty('CYBOZU_USER')     || '',
   CYBOZU_PASSWORD: PropertiesService.getScriptProperties().getProperty('CYBOZU_PASSWORD') || '',
 
-  /**
-   * 日報カスタムアプリのアプリID
-   * 【確認方法】サイボウズOfficeでカスタムアプリを開いた時のURLを確認する
-   *   例：https://xxxxxx.cybozu.com/o/a.cgi?...&pid=123  → pid の数字が APP_ID
-   *   またはブラウザのURLバーに表示されるアプリ固有の番号
-   */
-  CYBOZU_APP_ID: 'your-app-id',
+  CYBOZU_DID:  '7',                      // アプリID（DID=7）
+  CYBOZU_VID:  '532',                    // ビューID（VID=532）
+  CYBOZU_FSID: '3-353-3427997-u347',     // フィルターID（FSID）
+  CYBOZU_OID:  '501',                    // クエリID（oid=501）
 
   /**
-   * 日報CSVの列定義（実際のCSVヘッダーを確認して設定済み）
-   * ヘッダー: 日報日付(0), 氏名(1), 所属部署(2), 本日の業務内容(3), 気づき(4), 明日の予定(5)
+   * 日報CSVの列定義（実際のCSVで確認済み）
+   * ヘッダー順: 日報日付(0), 氏名(1), 所属部署(2), 本日の業務内容(3), 気づき(4), 明日の予定(5)
    */
   CSV_COLUMNS: {
-    date:       0,   // 日報日付
-    name:       1,   // 氏名
-    department: 2,   // 所属部署
-    body:       3,   // 本日の業務内容（列4「気づき」・列5「明日の予定」も結合して渡す）
-    notes:      4,   // 気づき
-    tomorrow:   5,   // 明日の予定
+    date:       0,
+    name:       1,
+    department: 2,
+    body:       3,
+    notes:      4,
+    tomorrow:   5,
   },
 
   // ── Gemini API ────────────────────────────────────────────────────────────
-  /** Gemini APIキー（スクリプトプロパティで管理推奨） */
   GEMINI_API_KEY: PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY') || '',
-
-  /** 使用するGeminiモデル（2026年4月時点の推奨モデル） */
-  GEMINI_MODEL: 'gemini-2.5-flash',
+  GEMINI_MODEL:   'gemini-2.5-flash',
 
   // ── Gmail ─────────────────────────────────────────────────────────────────
-  /** 送信先メールアドレス（社長） */
   RECIPIENT_EMAIL: 'president@your-company.co.jp',
-
-  /** 送信元の表示名 */
-  SENDER_NAME: '社長室AIアラートシステム',
+  SENDER_NAME:     '社長室AIアラートシステム',
 };
 
 // ===========================================================================
@@ -288,65 +271,89 @@ function loginToCybozuOffice() {
 /**
  * サイボウズOffice カスタムアプリから前日分のCSVをダウンロードして日報データを返す
  *
+ * 【取得の仕組み（DevToolsで確認済み）】
+ *   STEP1: ログインしてセッションCookieを取得
+ *   STEP2: 書き出しページ（DBFileExport）をGETしてcsrf_ticketを抽出
+ *   STEP3: csrf_ticketを含むフォームをPOSTしてShift-JIS形式のCSVを取得
+ *   STEP4: CSVをパースして対象日のデータに絞り込む
+ *
  * @param {string} date - "YYYY-MM-DD" 形式（前日の日付）
  * @returns {Array<{name:string, department:string, date:string, body:string}>}
  */
 function fetchCybozuDailyReports(date) {
+  const baseUrl = `https://${CONFIG.CYBOZU_SUBDOMAIN}.cybozu.com/o/ag.cgi`;
 
   // ── STEP 1: ログイン ──────────────────────────────────────────────────────
   const sessionCookie = loginToCybozuOffice();
 
-  // ── STEP 2: CSVダウンロード ───────────────────────────────────────────────
-  //
-  // 【CSVダウンロードURLの確認方法】
-  //   ChromeのDevToolsで手動CSVダウンロードを実行し、
-  //   Networkタブに表示されたURLをそのままコピーしてください。
-  //   例: https://xxxxxx.cybozu.com/o/a.cgi?fnc=Download&...&pid=123
-  //
-  // 一般的なURLパラメータ（環境によって異なります）:
-  //   fnc=Download または Export
-  //   pid=[アプリID]
-  //   type=csv
-  //   charset=UTF-8
-  //   行絞り込み条件（日付フィルター）が含まれる場合は Date 系パラメータ
-  //
-  // ここでは「日付で絞り込む」パラメータを date 変数から動的に生成します。
-  // ※ 実際のURLパラメータはDevToolsで確認して書き換えてください。
-  const csvUrl =
-    `https://${CONFIG.CYBOZU_SUBDOMAIN}.cybozu.com/o/a.cgi` +
-    `?fnc=Download` +
-    `&pid=${CONFIG.CYBOZU_APP_ID}` +
-    `&charset=UTF-8` +
-    `&type=csv` +
-    // 絞り込み条件（日付フィルター）。実際のURLを確認して修正してください。
-    `&FilterDate=${date.replace(/-/g, '/')}`;
-
-  const csvOptions = {
+  // ── STEP 2: 書き出しページを取得して csrf_ticket を抽出 ───────────────────
+  const exportPageRes = UrlFetchApp.fetch(baseUrl, {
     method:             'get',
+    headers:            { 'Cookie': sessionCookie },
+    payload:            { page: 'DBFileExport', DID: CONFIG.CYBOZU_DID, VID: CONFIG.CYBOZU_VID,
+                          FSID: CONFIG.CYBOZU_FSID, oid: CONFIG.CYBOZU_OID },
+    muteHttpExceptions: true,
+    followRedirects:    true,
+  });
+  const exportHtml = exportPageRes.getContentText('Shift_JIS');
+
+  let csrfTicket = '';
+  const csrfPatterns = [
+    /name="csrf_ticket"\s+value="([^"]+)"/,
+    /csrf_ticket['":\s]+([0-9a-f]{32})/i,
+    /"csrf_ticket":"([^"]+)"/,
+  ];
+  for (const pattern of csrfPatterns) {
+    const m = exportHtml.match(pattern);
+    if (m) { csrfTicket = m[1]; break; }
+  }
+  Logger.log(csrfTicket
+    ? `[CSV] csrf_ticket取得成功: ${csrfTicket.substring(0, 8)}...`
+    : '[CSV] csrf_ticketが見つかりません。なしで続行します。'
+  );
+
+  // ── STEP 3: フォームPOSTでCSVダウンロード ────────────────────────────────
+  const postPayload = {
+    Page:      'DBFileExport',
+    DID:       CONFIG.CYBOZU_DID,
+    CT:        '1',
+    cnt:       '1',
+    encoding:  'Shift_JIS:NCR',
+    fieldName: '',
+    VID:       CONFIG.CYBOZU_VID,
+    FSID:      CONFIG.CYBOZU_FSID,
+    oid:       CONFIG.CYBOZU_OID,
+    export:    '\u66f8\u304d\u51fa\u3059',   // 「書き出す」
+    sid:       'csv',
+  };
+  if (csrfTicket) postPayload.csrf_ticket = csrfTicket;
+
+  const csvRes    = UrlFetchApp.fetch(baseUrl, {
+    method:             'post',
+    payload:            postPayload,
     headers:            { 'Cookie': sessionCookie },
     muteHttpExceptions: true,
     followRedirects:    true,
-  };
-
-  const csvResponse = UrlFetchApp.fetch(csvUrl, csvOptions);
-  const csvStatus   = csvResponse.getResponseCode();
+  });
+  const csvStatus = csvRes.getResponseCode();
 
   if (csvStatus !== 200) {
     throw new Error(
       `CSV取得エラー: HTTPステータス ${csvStatus}\n` +
-      `URL: ${csvUrl}\n` +
-      `レスポンス: ${csvResponse.getContentText().substring(0, 300)}`
+      `レスポンス: ${csvRes.getContentText('Shift_JIS').substring(0, 300)}`
     );
   }
 
-  const csvText = csvResponse.getContentText('UTF-8');
+  // Shift-JIS で読み込む（encoding=Shift_JIS:NCR で書き出されるため）
+  const csvText = csvRes.getContentText('Shift_JIS');
+  Logger.log(`[CSV] 取得文字数: ${csvText.length}`);
 
   if (!csvText || csvText.trim() === '') {
-    Logger.log('[INFO] 指定日のCSVデータが空です（日報0件の可能性）。');
+    Logger.log('[INFO] CSVデータが空です（日報0件の可能性）。');
     return [];
   }
 
-  // ── STEP 3: CSV パース ────────────────────────────────────────────────────
+  // ── STEP 4: CSV パース → 対象日で絞り込み ────────────────────────────────
   return parseCsvToReports(csvText, date);
 }
 
@@ -369,23 +376,27 @@ function parseCsvToReports(csvText, date) {
 
   const dataRows = rows.slice(1);
 
-  return dataRows
-    .map(row => {
-      // 「本日の業務内容」「気づき」「明日の予定」を結合してAIに渡す（解析精度向上）
-      const bodyParts = [
-        row[col.body]     ? `【本日の業務内容】\n${row[col.body].trim()}`     : '',
-        row[col.notes]    ? `【気づき】\n${row[col.notes].trim()}`            : '',
-        row[col.tomorrow] ? `【明日の予定】\n${row[col.tomorrow].trim()}`     : '',
-      ].filter(Boolean);
+    const records = dataRows
+      .map(row => {
+        const bodyParts = [
+          row[col.body]     ? `【本日の業務内容】\n${row[col.body].trim()}`  : '',
+          row[col.notes]    ? `【気づき】\n${row[col.notes].trim()}`         : '',
+          row[col.tomorrow] ? `【明日の予定】\n${row[col.tomorrow].trim()}`  : '',
+        ].filter(Boolean);
 
-      return {
-        name:       (row[col.name]       || '不明').trim(),
-        department: (row[col.department] || '不明').trim(),
-        date:       (row[col.date]       || date).trim().replace(/\//g, '-').substring(0, 10),
-        body:       bodyParts.join('\n\n'),
-      };
-    })
-    .filter(r => r.body !== '');
+        return {
+          name:       (row[col.name]       || '不明').trim(),
+          department: (row[col.department] || '不明').trim(),
+          date:       (row[col.date]       || date).trim().replace(/\//g, '-').substring(0, 10),
+          body:       bodyParts.join('\n\n'),
+        };
+      })
+      .filter(r => r.body !== '');
+
+    // 対象日のレコードのみに絞り込む（FSIDフィルターが全件返す場合の安全策）
+    const filtered = records.filter(r => r.date === date);
+    Logger.log(`[CSV] 全件: ${records.length} 件 → 対象日(${date}): ${filtered.length} 件`);
+    return filtered;
 }
 
 /**
